@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config();
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 export default class MyDocument extends Document {
