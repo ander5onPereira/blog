@@ -1,14 +1,11 @@
+import { PostDTO } from "@/Interface/Post";
 import usePost from "@/hooks/usePost";
-import { getPost } from "@/services/posts";
+import { searchPost } from "@/services/posts";
 import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 
 interface PostProps {
-  post: {
-    id: string;
-    title: string;
-    content: string;
-  };
+  post: PostDTO;
 }
 export default function Post({ post }: PostProps) {
   const { setCurrentPost } = usePost();
@@ -30,11 +27,13 @@ export default function Post({ post }: PostProps) {
 }
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
-  const post = await getPost(Number(id));
-  if (post.status !== 200) {
+
+  const post = await searchPost(Number(id));
+
+  if (post?.status !== 200) {
     return {
       redirect: {
-        destination: `/${post.status}`,
+        destination: `/${post?.status}`,
         permanent: false,
       },
     };

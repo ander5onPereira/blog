@@ -1,22 +1,18 @@
+import { PostDTO } from "@/Interface/Post";
 import { createContext, ReactNode, useState } from "react";
 
 interface PropsProvider {
   children: ReactNode;
 }
-interface PostProps {
-  id: string;
-  title: string;
-  content: string;
-}
 interface PostContextProps {
-  setCurrentPost: (currentPost: PostProps) => void;
-  post: PostProps | null;
+  setCurrentPost: (currentPost: PostDTO | null) => void;
+  post: PostDTO | null;
 }
 const PostContext = createContext({} as PostContextProps);
 
 export function PostProvider({ children }: PropsProvider) {
-  const [post, setPost] = useState<PostProps | null>(null);
-  const setCurrentPost = (currentPost: PostProps) => {
+  const [post, setPost] = useState<PostDTO | null>(null);
+  const setCurrentPost = (currentPost: PostDTO | null) => {
     setPost(currentPost);
   };
 

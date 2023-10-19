@@ -1,6 +1,11 @@
+import { useToast } from "@/hooks/useToast";
+import { createPost } from "@/services/posts";
+import { useRouter } from "next/router";
 import React, { useState, ChangeEvent } from "react";
 
 export default function Create() {
+  const { showToast } = useToast();
+  const router = useRouter();
   const [editedPost, setEditedPost] = useState({
     title: "",
     content: "",
@@ -11,13 +16,16 @@ export default function Create() {
     const { name, value } = e.target;
     setEditedPost({ ...editedPost, [name]: value });
   };
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editedPost?.title.trim() === "" || editedPost?.content.trim() === "") {
-      alert("Por favor, preencha todos os campos.");
+      showToast("alert", "Por favor, preencha todos os campos.");
     } else {
-      // onSave(editedPost);
-      const dateSubmit = {
-        ...editedPost
+      const response = await createPost(editedPost);
+      if (response.status === 200) {
+        showToast("success", "Novo post cadastrado");
+        return router.replace("/");
+      } else {
+        showToast("error", "Ocorreu um erro no cadastro.");
       }
     }
   };
@@ -52,9 +60,12 @@ export default function Create() {
         />
       </div>
       <div className="flex justify-end w-full">
-        
-      <button onClick={handleSave} className="bg-violet-800 w-36 py-2 rounded-lg text-white hover:bg-violet-900">Salvar</button>
-    </div>
+        <button
+          onClick={handleSave}
+          className="bg-violet-800 w-36 py-2 rounded-lg text-white hover:bg-violet-900">
+          Salvar
+        </button>
+      </div>
     </div>
   );
 }

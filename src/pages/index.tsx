@@ -6,13 +6,9 @@ import { GetStaticProps } from "next";
 import { listPosts } from "@/services/posts";
 import ButtonActionAdd from "@/components/ButtonActionAdd";
 import Separator from "@/components/Separator";
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-};
+import { PostDTO } from "@/Interface/Post";
 interface PostsProps {
-  posts: Post[];
+  posts: PostDTO[];
 }
 export default function Posts({ posts }: PostsProps) {
   return (

@@ -1,9 +1,16 @@
+import { PostDTO } from "@/Interface/Post";
 import usePost from "@/hooks/usePost";
+import { useToast } from "@/hooks/useToast";
+import { patchPost } from "@/services/posts";
+import { useRouter } from "next/router";
 import React, { useState, ChangeEvent } from "react";
 
 export default function Edit() {
-  const { post } = usePost();
-  const [editedPost, setEditedPost] = useState({
+  const { post, setCurrentPost } = usePost();
+  const { showToast } = useToast();
+  const router = useRouter();
+  const [editedPost, setEditedPost] = useState<PostDTO>({
+    id: post?.id || -1,
     title: post?.title || "",
     content: post?.content || "",
   });
@@ -13,16 +20,21 @@ export default function Edit() {
     const { name, value } = e.target;
     setEditedPost({ ...editedPost, [name]: value });
   };
-  const handleSave = () => {
-    if (editedPost?.title.trim() === "" || editedPost?.content.trim() === "") {
-      alert("Por favor, preencha todos os campos.");
+  const isFormValid = () => {
+    return editedPost.title.trim() !== "" && editedPost.content.trim() !== "";
+  };
+  const handleSave = async () => {
+    if (!isFormValid()) {
+      showToast("alert", "Por favor, preencha todos os campos.");
     } else {
-      // onSave(editedPost);
-      const dateSubmit = {
-        ...editedPost,
-        id:post?.id
+      const response = await patchPost(editedPost);
+      if (response.status === 200) {
+        showToast("success", "Atualizado com sucesso.");
+        setCurrentPost(response.data);
+        router.back();
+      } else {
+        showToast("error", "Ocorreu um erro na atualização.");
       }
-      console.log({ dateSubmit});
     }
   };
   return (
@@ -56,9 +68,12 @@ export default function Edit() {
         />
       </div>
       <div className="flex justify-end w-full">
-        
-      <button onClick={handleSave} className="bg-violet-800 w-36 py-2 rounded-lg text-white hover:bg-violet-900">Salvar</button>
-    </div>
+        <button
+          onClick={handleSave}
+          className="bg-violet-800 w-36 py-2 rounded-lg text-white hover:bg-violet-900">
+          Salvar
+        </button>
+      </div>
     </div>
   );
 }
