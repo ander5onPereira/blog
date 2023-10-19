@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { listPosts } from "@/services/posts";
 import ButtonActionAdd from "@/components/ButtonActionAdd";
 import { PostDTO } from "@/Interface/Post";
@@ -23,7 +23,7 @@ export default function Posts({ posts }: PostsProps) {
     </>
   );
 }
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await listPosts();
   if (posts.status !== 200) {
     return {
