@@ -3,7 +3,7 @@ import { IoMdClose } from "react-icons/io";
 
 interface ModalProps {
   isOpen: boolean;
-  title: string;
+  title?: string;
   onClose: () => void;
   children: React.ReactNode;
 }
@@ -11,7 +11,7 @@ interface ModalProps {
 export default function Modal({
   isOpen,
   onClose,
-  title,
+  title='',
   children,
 }: ModalProps) {
   if (!isOpen) return null;

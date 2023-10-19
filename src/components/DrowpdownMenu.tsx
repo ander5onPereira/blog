@@ -51,7 +51,7 @@ function DropdownMenu() {
           </ul>
         )}
       </div>
-      <Modal isOpen={modalOpen} onClose={closeModal} title="">
+      <Modal isOpen={modalOpen} onClose={closeModal}>
         <div className="mt-5">
           <p className="px-5 pb-5  h-36 flex items-center justify-center w-72 font-medium text-lg">
             Deseja excluir esse post?
