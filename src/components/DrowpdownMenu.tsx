@@ -2,9 +2,17 @@ import { useState } from "react";
 import { IoIosMenu } from "react-icons/io";
 import Modal from "./Modal";
 import Link from "next/link";
+import { deletePost } from "@/services/posts";
+import usePost from "@/hooks/usePost";
+
+import { useRouter } from "next/router";
+import { useToast } from "@/hooks/useToast";
 
 function DropdownMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
+  const router = useRouter();
+  const { showToast } = useToast();
+  const { post, setCurrentPost } = usePost();
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -19,8 +27,17 @@ function DropdownMenu() {
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
-  const handlerExcluir = () => {
-    closeModal();
+  const handlerExcluir = async () => {
+    const response = await deletePost(Number(post?.id));
+    if (response.status === 200 || response.status === 204) {
+      showToast("success", "Atualizado com sucesso.");
+      setCurrentPost(null);
+      closeModal();
+      router.replace("/");
+    } else {
+      showToast("error", "Ocorreu um erro apagar post.");
+      closeModal();
+    }
   };
 
   return (
