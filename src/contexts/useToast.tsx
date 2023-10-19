@@ -1,21 +1,24 @@
+import React, { useState, createContext, ReactNode } from "react";
 import Toast from "@/components/Toast";
-import React, { useState, createContext, useContext, ReactNode } from "react";
 
 interface ToastProviderProps {
   children: ReactNode;
 }
+
+interface ToastProps {
+  type: "alert" | "error" | "success";
+  message: string;
+}
 interface ToastContextType {
-  showToast: (type: string, message: string) => void;
+  showToast: ({ type, message }: ToastProps) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export function ToastProvider({ children }: ToastProviderProps) {
-  const [toast, setToast] = useState<{ type: string; message: string } | null>(
-    null
-  );
+  const [toast, setToast] = useState<ToastProps | null>(null);
 
-  const showToast = (type: string, message: string) => {
+  const showToast = ({ type, message }: ToastProps) => {
     setToast({ type, message });
     setTimeout(() => {
       setToast(null);
@@ -32,7 +35,3 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
 export const ToastConsumer = ToastContext.Consumer;
 export default ToastContext;
-
-
-
-

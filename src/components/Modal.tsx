@@ -26,7 +26,7 @@ export default function Modal({
             <IoMdClose />
           </button>
         </div>
-        <div>{children}</div>
+        <div className="p-4">{children}</div>
       </div>
     </div>
   );

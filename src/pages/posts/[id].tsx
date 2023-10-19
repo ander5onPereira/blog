@@ -28,20 +28,25 @@ export default function Post({ post }: PostProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.query;
 
-  const post = await searchPost(Number(id));
-
-  if (post?.status !== 200) {
+  try {
+    const post = await searchPost(Number(id));
+    if (post?.status !== 200) {
+      return {
+        redirect: {
+          destination: `/${post?.status}`,
+          permanent: false,
+        },
+      };
+    }
     return {
-      redirect: {
-        destination: `/${post?.status}`,
-        permanent: false,
+      props: {
+        post: post.data,
       },
     };
+  } catch (error) {
+    console.error("Erro ao buscar o post:", error);
+    return {
+      notFound: true,
+    };
   }
-
-  return {
-    props: {
-      post: post.data,
-    },
-  };
 };

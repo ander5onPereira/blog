@@ -1,5 +1,5 @@
-import { PostDTO } from "@/Interface/Post";
 import { createContext, ReactNode, useState } from "react";
+import { PostDTO } from "@/Interface/Post";
 
 interface PropsProvider {
   children: ReactNode;

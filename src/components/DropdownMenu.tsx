@@ -8,13 +8,13 @@ import usePost from "@/hooks/usePost";
 import { useRouter } from "next/router";
 import { useToast } from "@/hooks/useToast";
 
-function DropdownMenu() {
+export default function DropdownMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const router = useRouter();
   const { showToast } = useToast();
   const { post, setCurrentPost } = usePost();
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
     toggleMenu();
@@ -24,18 +24,42 @@ function DropdownMenu() {
   const closeModal = () => {
     setModalOpen(false);
   };
+
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
+
   const handlerExcluir = async () => {
-    const response = await deletePost(Number(post?.id));
-    if (response.status === 200 || response.status === 204) {
-      showToast("success", "Atualizado com sucesso.");
-      setCurrentPost(null);
+    const postId = post?.id;
+    if (!postId) {
+      showToast({
+        type: "error",
+        message: "Post não encontrado para exclusão.",
+      });
       closeModal();
-      router.replace("/");
-    } else {
-      showToast("error", "Ocorreu um erro apagar post.");
+      return;
+    }
+
+    try {
+      const response = await deletePost(Number(postId));
+      if (response.status === 200 || response.status === 204) {
+        showToast({ type: "success", message: "Post excluído com sucesso." });
+        setCurrentPost(null);
+        closeModal();
+        router.replace("/");
+      } else {
+        showToast({
+          type: "error",
+          message: "Ocorreu um erro ao excluir o post.",
+        });
+        closeModal();
+      }
+    } catch (error) {
+      console.error("Erro ao excluir o post:", error);
+      showToast({
+        type: "error",
+        message: "Ocorreu um erro ao excluir o post.",
+      });
       closeModal();
     }
   };
@@ -84,5 +108,3 @@ function DropdownMenu() {
     </>
   );
 }
-
-export default DropdownMenu;

@@ -9,31 +9,40 @@ export default function Edit() {
   const { post, setCurrentPost } = usePost();
   const { showToast } = useToast();
   const router = useRouter();
+
   const [editedPost, setEditedPost] = useState<PostDTO>({
     id: post?.id || -1,
     title: post?.title || "",
     content: post?.content || "",
   });
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setEditedPost({ ...editedPost, [name]: value });
   };
+
   const isFormValid = () => {
     return editedPost.title.trim() !== "" && editedPost.content.trim() !== "";
   };
   const handleSave = async () => {
     if (!isFormValid()) {
-      showToast("alert", "Por favor, preencha todos os campos.");
+      showToast({type:"alert", message:"Por favor, preencha todos os campos."});
     } else {
-      const response = await patchPost(editedPost);
-      if (response.status === 200) {
-        showToast("success", "Atualizado com sucesso.");
-        setCurrentPost(response.data);
-        router.back();
-      } else {
-        showToast("error", "Ocorreu um erro na atualização.");
+      try {
+        
+        const response = await patchPost(editedPost);
+        if (response.status === 200) {
+          showToast({type:"success", message:"Atualizado com sucesso."});
+          setCurrentPost(response.data);
+          router.back();
+        } else {
+          showToast({type:"error", message:"Ocorreu um erro na atualização."});
+        }
+      } catch (error) {
+        console.error("Erro na atualização do post:", error);
+        showToast({ type: "error", message: "Ocorreu um erro na atualização." });
       }
     }
   };

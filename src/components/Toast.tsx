@@ -1,22 +1,25 @@
-interface toastProps {
-  type: string;
+interface ToastProps {
+  type: "alert" | "error" | "success";
   message: string;
 }
-export default function Toast({ type, message }: toastProps) {
-  let toastColor = "";
 
+const getToastColor = (type: ToastProps["type"]) => {
   switch (type) {
     case "alert":
-      toastColor = "rgba(234,179, 8,0.75)";
-      break;
+      return "rgba(234, 179, 8, 0.75)";
     case "error":
-      toastColor = "rgba(244,63,94,0.75)";
-      break;
+      return "rgba(244, 63, 94, 0.75)";
     case "success":
-      toastColor = "rgba(34,197,94,0.75)";
-      break;
+      return "rgba(34, 197, 94, 0.75)";
     default:
-      break;
+      return "";
+  }
+};
+export default function Toast({ type, message }: ToastProps) {
+  const toastColor = getToastColor(type);
+
+  if (!toastColor) {
+    return null;
   }
 
   return (

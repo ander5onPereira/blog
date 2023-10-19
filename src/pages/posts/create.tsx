@@ -6,10 +6,12 @@ import React, { useState, ChangeEvent } from "react";
 export default function Create() {
   const { showToast } = useToast();
   const router = useRouter();
+
   const [editedPost, setEditedPost] = useState({
     title: "",
     content: "",
   });
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -17,15 +19,22 @@ export default function Create() {
     setEditedPost({ ...editedPost, [name]: value });
   };
   const handleSave = async () => {
-    if (editedPost?.title.trim() === "" || editedPost?.content.trim() === "") {
-      showToast("alert", "Por favor, preencha todos os campos.");
+    const { title, content } = editedPost;
+    if (!title.trim() || !content.trim()) {
+      showToast({type:"alert", message:"Por favor, preencha todos os campos."});
     } else {
-      const response = await createPost(editedPost);
-      if (response.status === 200) {
-        showToast("success", "Novo post cadastrado");
-        return router.replace("/");
-      } else {
-        showToast("error", "Ocorreu um erro no cadastro.");
+      try {
+        
+        const response = await createPost(editedPost);
+        if (response.status === 201) {
+          showToast({type:"success", message:"Novo post cadastrado"});
+          return router.replace("/");
+        } else {
+          showToast({type:"error", message:"Ocorreu um erro no cadastro."});
+        }
+      } catch (error) {
+        console.error("Erro no cadastro do post:", error);
+        showToast({type:"error", message:"Ocorreu um erro no cadastro."});
       }
     }
   };

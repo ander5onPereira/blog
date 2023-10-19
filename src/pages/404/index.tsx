@@ -2,17 +2,19 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 
-export default function Custon404() {
+export default function Custom404() {
   const router = useRouter();
+
   const handleHome = () => {
     router.replace("/");
   };
+
   return (
-    <div className=" flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen">
       <div className="w-1/3">
         <Image
           src="/404.svg"
-          alt="warning"
+          alt="Página não encontrada"
           className="w-full h-full"
           width={100}
           height={100}

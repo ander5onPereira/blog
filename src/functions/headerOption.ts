@@ -1,11 +1,11 @@
 import { GoBackVisible, HeaderVisible, MenuVisible } from "@/constants/headerOptions";
 
-export const GoBack = (path: string) => {
+export const isVisibleGoBack = (path: string) => {
   return GoBackVisible.includes(path);
 };
-export const Menu = (path: string) => {
+export const isVisibleMenu = (path: string) => {
   return MenuVisible.includes(path);
 };
-export const Header = (path: string) => {
+export const isVisibleHeader = (path: string) => {
   return HeaderVisible.includes(path);
 };
