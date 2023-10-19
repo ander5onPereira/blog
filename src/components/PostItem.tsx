@@ -18,7 +18,7 @@ export default function PostItem({ post }: PostItemProps) {
           <h2 className="text-violet-800 px-4 sm:px-0 text-center sm:text-left">
             <strong>{post.title}</strong>
           </h2>
-          <p className="px-4 sm:px-0">{CutText(post.content, 100)}</p>
+          <p className="px-4 sm:px-0">{CutText(post.content, 180)}</p>
         </div>
         <Separator />
       </Link>
