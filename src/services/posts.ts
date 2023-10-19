@@ -1,10 +1,5 @@
+import { PostDTO } from "@/Interface/Post";
 import { getAPIClient } from "./api";
-
-interface PostDTO {
-  id: number;
-  title: string;
-  content: string;
-}
 
 export const searchPost = async (id: number) => {
   const api = getAPIClient();
@@ -21,8 +16,8 @@ export const searchPost = async (id: number) => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
@@ -42,8 +37,8 @@ export const putPost = async (data: PostDTO) => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
@@ -64,8 +59,8 @@ export const deletePost = async (id: number) => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
@@ -85,8 +80,8 @@ export const patchPost = async (data: PostDTO) => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
@@ -106,8 +101,8 @@ export const listPosts = async () => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
@@ -116,7 +111,7 @@ export const listPosts = async () => {
 export const createPost = async (data: Omit<PostDTO, "id">) => {
   const api = getAPIClient();
   return api
-    .post(`/api/posts`,data)
+    .post(`/api/posts`, data)
     .then((res) => {
       return {
         status: res.status,
@@ -128,8 +123,8 @@ export const createPost = async (data: Omit<PostDTO, "id">) => {
       console.error(err);
 
       return {
-        status: err.response.status,
-        message: err.response.statusText,
+        status: err?.response?.status,
+        message: err?.response?.statusText,
         data: null,
       };
     });
